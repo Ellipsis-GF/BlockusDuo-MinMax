@@ -203,9 +203,7 @@ void MoovePieceOnBoard(SDL_Window *window, SDL_Renderer *renderer, Piece *piece,
 {
     SDL_Rect rectangle;
     SDL_Rect rectangleP;
-    int cell_size;
     int w_screen, h_screen;
-    int raw, column;
 
     SDL_GetWindowSize(window, &w_screen, &h_screen);
 
