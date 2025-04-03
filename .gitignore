@@ -1,0 +1,13 @@
+# Ignore le dossier de compilation
+build/
+
+# Ignore l'exécutable
+blokus.out
+
+# Ignore les fichiers générés par le compilateur
+*.o
+*.d
+core
+
+# Ignore le dossier de configuration de VS Code
+.vscode/
