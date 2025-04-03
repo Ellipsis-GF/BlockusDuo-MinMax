@@ -1,24 +1,25 @@
-SRC=main.c # fichiers source
-SRC+=piece.c game.c init.c decisionTree.c blokus.c# autre fichiers source
+SRC_DIR=src
+BUILD_DIR=build
+SRC=$(wildcard $(SRC_DIR)/*.c) # Récupère tous les fichiers .c dans src/
 EXE=blokus.out # fichier exécutable
 
 CC=gcc
 CFLAGS:=-Wall -Wextra -MMD -Og -g $(sdl2-config --cflags) # options de compilation
 LDFLAGS:=-lSDL2_image -lSDL2_ttf -lSDL2_gfx -lm -lSDL2  # options de l'éditeur de liens
 
-OBJ=$(addprefix build/,$(SRC:.c=.o)) # met les .o dans build
-DEP=$(addprefix build/,$(SRC:.c=.d)) # met les .d dans build (fichiers de dépendance)
+OBJ=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC)) # Convertit src/*.c en build/*.o
+DEP=$(OBJ:.o=.d) # Génère les fichiers de dépendance
 
-all: $(OBJ)
-	$(CC) -o $(EXE) $^ $(LDFLAGS) 
-    # lie tous les fichiers objets pour créer l'exécutable
+all: $(EXE)
 
-build/%.o: %.c
-	@mkdir -p build
+$(EXE): $(OBJ)
+	$(CC) -o $@ $^ $(LDFLAGS) 
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(BUILD_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $< 
-    # compile le fichier source en fichier objet
 
 clean:
-	rm -rf build core *.o # supprime le répertoire build, le fichier core, et tous les fichiers .o
+	rm -rf $(BUILD_DIR) core $(EXE) # supprime build/, l'exécutable et core dump
 
--include $(DEP) # inclut les fichiers de dépendances générés par -MMD
+-include $(DEP) # inclut les fichiers de dépendance générés par -MMD
